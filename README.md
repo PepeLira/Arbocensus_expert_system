@@ -1,2 +1,2 @@
 # Arbocensus_research_and_development
-Arbocensus es un proyecto impulsado por la Facultad de Ingeniería de la Universidad de los Andes, el cual primero consta del desarrollo de un dataset  personalizado, debido a la falta de un conjunto de datos de árboles urbanos públicos.
+Arbocensus es un proyecto impulsado por la Facultad de Ingeniería de la Universidad de los Andes para la detección y censado del arbolado urbano. Considera el desarrollo de un dataset personalizado, debido a la falta de un conjunto de datos de árboles urbanos públicos. Además del desarrollo de modelos para determinar especies de los árboles, segmentación individual, reconocer los troncos de los árboles y determinar la inclinación del tronco en entornos urbanos.
