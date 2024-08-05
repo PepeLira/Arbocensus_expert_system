@@ -5,3 +5,5 @@ mask_results
 batch_*.json
 images
 *.pth
+*.env
+!parameters.env
