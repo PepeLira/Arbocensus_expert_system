@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.mixture import GaussianMixture
+from scipy.stats import gaussian_kde
+from scipy.signal import find_peaks
+from .model_helpers import moving_average
 
 def plot_gmm(depths, counts, labels, n_components=2):
     plt.figure(figsize=(10, 6))
@@ -64,7 +67,7 @@ def separate_components(depths, labels):
 
     return components
 
-def filter_depth_segments(components, depth_image_array):
+def separate_depth_segments(components, depth_image_array):
     filtered_depth_images = []
     for i in range(len(components)):
         start_roi = np.min(components[i])
@@ -82,7 +85,7 @@ def isolate_close_values(values):
 
     groups = []
     current_group = [values[0]]
-    if len(slopes) >= 2:
+    if len(slopes) >= 3:
         for i in range(1, len(values)):
             if slopes[i-1] <= slopes_threshold:
                 current_group.append(values[i])
@@ -96,3 +99,68 @@ def isolate_close_values(values):
         groups = values
 
     return groups
+
+def kde_segmentation(data, bandwidth=None, plot=True, threshold=0.02):
+    """
+    Perform 1D Kernel Density Estimation (KDE) segmentation.
+
+    Parameters:
+    data (array-like): The data to be segmented.
+    bandwidth (float, optional): The bandwidth for KDE. If None, it will be automatically determined.
+    plot (bool, optional): If True, plots the KDE and segmentation.
+    threshold (float, optional): The percentage threshold to filter low-density values.
+
+    Returns:
+    segments (list): A list of arrays, each containing a segment of the data.
+    minima (array): The values of the local minima used for segmentation.
+    """
+    # Perform KDE
+    kde = gaussian_kde(data, bw_method=bandwidth)
+
+    # Evaluate KDE on a grid
+    x_grid = np.linspace(data.min() - 1, data.max() + 1, 1000)
+    kde_values = kde(x_grid)
+
+    # Apply threshold to filter low-density values
+    threshold_value = threshold * np.max(kde_values)
+    kde_values[kde_values < threshold_value] = np.nan
+
+    # Find local minima to identify segments
+    peaks, _ = find_peaks(-kde_values)
+
+    # Calculate distances between consecutive peaks
+    peak_distances = np.diff(peaks)
+
+    # Calculate mean peak distance
+    mean_peak_distance = np.mean(peak_distances)
+
+    peaks, _ = find_peaks(-kde_values, distance=mean_peak_distance*1.1)
+    minima = x_grid[peaks]
+
+    # Function to segment data based on thresholds
+    def segment_data(data, minima):
+        segments = []
+        last_min = data.min() - 1
+        for min_val in minima:
+            segments.append(data[(data > last_min) & (data <= min_val)])
+            last_min = min_val
+        segments.append(data[data > last_min])
+        return segments
+
+    # Segment the data
+    segments = segment_data(data, minima)
+
+    # Plot KDE and the segmentation
+    if plot:
+        plt.figure(figsize=(10, 6))
+        plt.plot(x_grid, kde_values, label='KDE')
+        for min_val in minima:
+            plt.axvline(min_val, color='r', linestyle='--')
+        plt.hist(data, bins=50, density=True, alpha=0.5, label='Data histogram')
+        plt.legend()
+        plt.title('1D Kernel Density Estimation Segmentation')
+        plt.xlabel('Value')
+        plt.ylabel('Density')
+        plt.show()
+
+    return segments

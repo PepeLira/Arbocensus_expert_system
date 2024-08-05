@@ -34,8 +34,8 @@ class GDinoObjectDetector:
         labels, boxes, scores = self.detect(image(), text_prompt)
         target_word_indexes = self.get_target_word_indexes(labels, target_words)
         best_boxes_indexes = self.get_best_boxes_indexes(image, boxes)
-        target_word_indexes = [i for i in target_word_indexes if i in best_boxes_indexes]
-
+        target_word_indexes = np.array([i for i in target_word_indexes if i in best_boxes_indexes])
+        target_word_indexes = np.unique(target_word_indexes)
         if len(target_word_indexes) == 0:
             return 0, None 
         else:

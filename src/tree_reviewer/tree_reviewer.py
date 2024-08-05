@@ -1,11 +1,13 @@
 from strategies.tree.tree_segmentation_strategy import TreeSegmentationStrategy
 from strategies.card.card_segmentation_strategy import CardSegmentationStrategy
 from models.card_image import CardImage
+from models.tree_metrics import TreeMetrics
 from helpers.validation_helper import ValidationHelper as vh
-import numpy as np
+import os
+from config import get_env
 
 class TreeReviewer:
-    def __init__(self, tree_segmentation_strategy, card_segmentation_strategy):
+    def __init__(self, tree_segmentation_strategy: TreeSegmentationStrategy, card_segmentation_strategy: CardSegmentationStrategy):
         self.tree_segmentation_strategy = tree_segmentation_strategy
         self.card_segmentation_strategy = card_segmentation_strategy
         self.error_tags = None
@@ -14,31 +16,53 @@ class TreeReviewer:
         self.error_tags = []
         tree_image = self.prepare_tree_image(tree_image, plot=plot)
         search_card_image = tree_image.get_search_card_image()
-        segmented_card = self.review_card(search_card_image, plot=plot)
-        if segmented_card is not None:
-            mm_per_pixel = segmented_card.evaluate_mm_per_pixel()
-            print(mm_per_pixel)
-        print(self.error_tags)
-
-    def review_card(self, image, plot=False):
-        card_image = CardImage(image)
+        lower_pixel_diameter = tree_image.tree_mask.get_lower_diameter()
+        segmented_card = self.review_card(search_card_image, lower_pixel_diameter)
+        tree_metrics = TreeMetrics(tree_image)
+        tree_metrics.assign_error_tags(self.error_tags)
+        if "No card detected" not in self.error_tags:
+            mm_per_pixel = segmented_card.mm_per_pixel
+            tree_metrics = self.measure_tree_metrics(tree_metrics, mm_per_pixel)
+        
         if plot:
-            card_image.display_image()
-        segmented_card = self.card_segmentation_strategy.segment(card_image)
-        validation_result = vh.validate_segmented_card(segmented_card)
+            segmented_card.display_image(with_mask=True)
+            tree_metrics.tree_image.display_image(with_tree_mask=True)
+
+        tree_metrics.group_metrics()
+
+        return tree_metrics
+
+    def review_card(self, image, pixel_diameter):
+        card_image = CardImage(image) 
+        if len(card_image.array) > 5:
+            card_image = self.card_segmentation_strategy.segment(card_image)
+        validation_result = vh.validate_segmented_card(card_image, pixel_diameter)
         self.error_tags += validation_result
-        return segmented_card
+        return card_image
     
     def prepare_tree_image(self, tree_image, plot=False):
         if plot:
             tree_image.display_image(with_tree_mask=False)
         tree_image = self.tree_segmentation_strategy.segment(tree_image, plot=plot)
-        if plot:
-            tree_image.display_image(with_tree_mask=True)
 
         validation_result = vh.validate_tree_image(tree_image)
         self.error_tags += validation_result
         return tree_image
+    
+    def measure_tree_metrics(self, tree_metrics, mm_per_pixel):
+        tree_metrics.define_metrics(mm_per_pixel)
+
+        validation_result = vh.validate_metrics(tree_metrics)
+        tree_metrics.assign_error_tags(validation_result)
+
+        return tree_metrics
+
+    def save_tree_figure(self, tree_image, output_path):
+        if not os.path.exists(os.path.join(output_path, 'mask_results')):
+            os.makedirs(os.path.join(output_path, 'mask_results'))
+    
+        mask_results_path = os.path.join(output_path, 'mask_results')
+        tree_image.save_image(mask_results_path)
 
     def get_error_tags(self):
         return self.error_tags
@@ -49,26 +73,19 @@ if __name__ == "__main__":
     from models.mask_extractor_sam import MaskExtractorSAM
     from models.monocular_depth_dam import MonocularDepthDAM
     from models.gdino_object_detector import GDinoObjectDetector
-    from strategies.tree.tree_segmentation_strategy import TreeSegmentationStrategy
-    from strategies.card.card_segmentation_strategy import CardSegmentationStrategy
+    from strategies.tree.first_tree_segmenter import FirstTreeSegmenter
 
-    tree_segmentation_strategy = TreeSegmentationStrategy(MaskExtractorSAM(), 
+    tree_segmentation_strategy = FirstTreeSegmenter(MaskExtractorSAM(), 
                                                         MonocularDepthDAM(), 
                                                         GDinoObjectDetector())
     card_segmentation_strategy = CardSegmentationStrategy(MaskExtractorSAM(), 
                                                         GDinoObjectDetector())
 
-    folder_path = "C:/Users/jflir/Documents/Arbocensus/ArbocensusData/20230829_24/"
+    folder_path = get_env('TEST_TREE_IMAGES_PATH')
     image_loader = ImageLoader(folder_path)
     tree_reviewer = TreeReviewer(tree_segmentation_strategy, card_segmentation_strategy)
 
     count = 0
 
-    image = next(image_loader.load_image(image_file='13312-0.jpg'))
+    image = next(image_loader.load_image(image_file='84436-0.jpg'))
     tree_validation_result = tree_reviewer.review_tree(image, plot=True)
-
-
-    # card_validation_result = tree_reviewer.review_card(image)
-
-    # error_tags = tree_reviewer.get_error_tags()
-    # print(error_tags)

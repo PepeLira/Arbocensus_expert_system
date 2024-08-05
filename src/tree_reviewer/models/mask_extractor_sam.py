@@ -1,10 +1,11 @@
 import torch
 from segment_anything import sam_model_registry, SamPredictor, SamAutomaticMaskGenerator
 import numpy as np
+from config import get_env
 
 class MaskExtractorSAM:
     def __init__(self):
-        sam_checkpoint = "C:/Users/jflir/Documents/Arbocensus/Arbocensus_research_and_development/weights_and_checkpoints/sam_vit_h_4b8939.pth"
+        sam_checkpoint = get_env("SAM_CHECKPOINT")
         model_type = "vit_h"
         device = self.get_device()
 
@@ -71,3 +72,6 @@ class MaskExtractorSAM:
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.ipc_collect()
+
+if __name__ == "__main__":
+    mask_extractor = MaskExtractorSAM()

@@ -12,9 +12,9 @@ class CardSegmentationStrategy:
             self.card_prompt,
             target_words=["card"])
         if score is None or bbox is None:
-            return None
+            return card_image
         bbox_center = np.array([[(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2]])
-        card_mask, score = self.mask_extractor.extract_mask(
+        card_mask, m_score = self.mask_extractor.extract_mask(
             card_image, 
             bbox_center, 
             np.array([1]), 
