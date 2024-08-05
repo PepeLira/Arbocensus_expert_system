@@ -1,3 +1,7 @@
 /weights_and_checkpoints
 __pycache__
 weights
+mask_results
+batch_*.json
+images
+*.pth
