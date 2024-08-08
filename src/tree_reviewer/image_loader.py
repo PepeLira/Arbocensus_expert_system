@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 import numpy as np
-from models.tree_image import TreeImage
+from tree_reviewer.models.tree_image import TreeImage
 from datetime import datetime
 
 class ImageLoader:

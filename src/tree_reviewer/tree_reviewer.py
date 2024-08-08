@@ -1,10 +1,10 @@
-from strategies.tree.tree_segmentation_strategy import TreeSegmentationStrategy
-from strategies.card.card_segmentation_strategy import CardSegmentationStrategy
-from models.card_image import CardImage
-from models.tree_metrics import TreeMetrics
-from helpers.validation_helper import ValidationHelper as vh
+from tree_reviewer.strategies.tree.tree_segmentation_strategy import TreeSegmentationStrategy
+from tree_reviewer.strategies.card.card_segmentation_strategy import CardSegmentationStrategy
+from tree_reviewer.models.card_image import CardImage
+from tree_reviewer.models.tree_metrics import TreeMetrics
+from tree_reviewer.helpers.validation_helper import ValidationHelper as vh
 import os
-from config import get_env
+from tree_reviewer.config import get_env
 
 class TreeReviewer:
     def __init__(self, tree_segmentation_strategy: TreeSegmentationStrategy, card_segmentation_strategy: CardSegmentationStrategy):
@@ -14,12 +14,14 @@ class TreeReviewer:
 
     def review_tree(self, tree_image, plot=False):  
         self.error_tags = []
-        tree_image = self.prepare_tree_image(tree_image, plot=plot)
+        
+        tree_image = self.segment_tree_image(tree_image, plot=plot)
         search_card_image = tree_image.get_search_card_image()
-        lower_pixel_diameter = tree_image.tree_mask.get_lower_diameter()
-        segmented_card = self.review_card(search_card_image, lower_pixel_diameter)
+        segmented_card = self.review_card(search_card_image, tree_image)
+
         tree_metrics = TreeMetrics(tree_image)
         tree_metrics.assign_error_tags(self.error_tags)
+
         if "No card detected" not in self.error_tags:
             mm_per_pixel = segmented_card.mm_per_pixel
             tree_metrics = self.measure_tree_metrics(tree_metrics, mm_per_pixel)
@@ -32,15 +34,16 @@ class TreeReviewer:
 
         return tree_metrics
 
-    def review_card(self, image, pixel_diameter):
+    def review_card(self, image, tree_image):
         card_image = CardImage(image) 
         if len(card_image.array) > 5:
             card_image = self.card_segmentation_strategy.segment(card_image)
+        pixel_diameter = tree_image.tree_mask.get_lower_diameter()
         validation_result = vh.validate_segmented_card(card_image, pixel_diameter)
         self.error_tags += validation_result
         return card_image
     
-    def prepare_tree_image(self, tree_image, plot=False):
+    def segment_tree_image(self, tree_image, plot=False):
         if plot:
             tree_image.display_image(with_tree_mask=False)
         tree_image = self.tree_segmentation_strategy.segment(tree_image, plot=plot)

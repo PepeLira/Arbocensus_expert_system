@@ -1,7 +1,7 @@
 import torch
 from segment_anything import sam_model_registry, SamPredictor, SamAutomaticMaskGenerator
 import numpy as np
-from config import get_env
+from tree_reviewer.config import get_env
 
 class MaskExtractorSAM:
     def __init__(self):

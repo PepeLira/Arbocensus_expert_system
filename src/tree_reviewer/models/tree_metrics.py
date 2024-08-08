@@ -12,6 +12,7 @@ class TreeMetrics:
         self.tree_height = None
         self.principal_branches_h = None
         self.dap = None
+        self.species = None
 
         self.select_tree_image_data()
 
@@ -35,6 +36,7 @@ class TreeMetrics:
         self.tree_height = height_from_tree_mask(tree_mask, mm_per_pixel)
         self.principal_branches_h = principal_branches_height(trunk_mask, mm_per_pixel)
         self.dap = dap_from_tree_mask(tree_mask, mm_per_pixel, self.tree_height)
+        self.species = self.tree_image.species
 
         self.tree_image.define_dap(self.dap)
         self.tree_image.define_height(self.tree_height)
@@ -55,7 +57,8 @@ class TreeMetrics:
         
         self.metrics = {'DAP': self.dap,
                         'height': self.tree_height,
-                        'principal_branches_height': self.principal_branches_h}
+                        'principal_branches_height': self.principal_branches_h,
+                        'species': self.species}
         
     def round_metrics(self):
         self.dap = float(round(self.dap, self.precision))

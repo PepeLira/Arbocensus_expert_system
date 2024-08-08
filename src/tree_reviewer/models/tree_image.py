@@ -18,6 +18,8 @@ class TreeImage:
         self.principal_branches_height = None
         self.trunk_xyxy = None
         self.mask_xyxy = None
+        self.species = None
+        self.species_confidence = None
 
     def get_image_xyxy_bbox(self, x_padding=30):
         size = self.array.shape
@@ -52,9 +54,6 @@ class TreeImage:
         path = path + '/masked-' + self.file
         fig.savefig(path, bbox_inches='tight', pad_inches=0)
         plt.close(fig)  # Close the figure to free memory
-
-    def define_tree_mask(self, mask: TreeMask):
-        self.tree_mask = mask
     
     def assign_hypothesis_score(self, score):
         self.hypothesis_score = score
@@ -64,6 +63,9 @@ class TreeImage:
 
     def get_search_card_image(self):
         return self.tree_mask.get_search_card_image(self.array)
+
+    def define_tree_mask(self, mask: TreeMask):
+        self.tree_mask = mask
     
     def define_dap(self, dap):
         self.dap = dap
@@ -73,6 +75,10 @@ class TreeImage:
 
     def define_principal_branches_height(self, height):
         self.principal_branches_height = height
+
+    def define_species(self, species, confidence):
+        self.species = species
+        self.species_confidence = confidence
 
     def get_trunk_xyxy_bbox(self):
         if self.tree_mask is not None and self.tree_mask.trunk_mask is not None:
