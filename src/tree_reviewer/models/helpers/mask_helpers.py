@@ -35,18 +35,23 @@ def find_longest_continuous_segment(data_array, y_start, start_padding=1, window
     """
     n_args = len(data_array)
     deltas = np.zeros(n_args)
-    for i in range(y_start, int(n_args*0.9)):
+    for i in range(y_start, n_args):
         deltas[i] = np.abs(data_array[i] - data_array[i - window_range])
     std = np.std(deltas)
     mean = np.mean(deltas)
-    threshold = std
+    threshold = std + mean
 
-    # get the index of the first element that is greater than the mean + 2*std
-    for i in range(int(n_args*0.9), y_start, -1):
-        if deltas[i] > threshold:
-            start = i
-            break
+    start = y_start
+    first_segment = True
     end = n_args - 1
+    # get the index of the first element that is greater than the mean + 2*std
+    for i in range(end, y_start, -1):
+        if deltas[i] > threshold:
+            if not first_segment:
+                start = i
+                break
+        else:
+            first_segment = False
     longest_segment = start, end
 
     return longest_segment

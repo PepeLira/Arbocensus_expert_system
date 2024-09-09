@@ -1,5 +1,6 @@
 from transformers import pipeline
 import numpy as np
+import torch
 from scipy.signal import find_peaks
 from .helpers.dam_helpers import plot_gmm, plot_filtered_depth_images
 from .helpers.dam_helpers import remove_outliers, fit_gmm, mask_depth_image
@@ -10,7 +11,8 @@ import matplotlib.pyplot as plt
 
 class MonocularDepthDAM:
     def __init__(self):
-        self.pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-small-hf")
+        device = 0 if torch.cuda.is_available() else -1
+        self.pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-small-hf", device=device)
 
     def get_depth_image_array(self, tree_image, mask = None):
         depth_image_array = self.measure_depth(tree_image.pil_image, mask = mask)

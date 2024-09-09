@@ -34,9 +34,9 @@ class TreeMask:
         
         return thinned_mask
 
-    def isolate_largest_segment(self, mask = []):
+    def isolate_largest_segment(self, mask = None):
         is_main_mask = False
-        if mask == []:
+        if mask is None:
             is_main_mask = True
             mask = self.binary_mask    
         labeled_mask, num_features = label(mask)
@@ -129,7 +129,7 @@ class TreeMask:
         self.trunk_mask[start:end, :] = self.binary_mask[start:end, :]
         trunk_segment, start, end = self.adjust_trunk_mask(diameters, y_coords, trunk_segment[0])
 
-        self.isolate_trunk_mask() 
+        self.isolate_trunk_mask()
 
         self.crown_mask = self.binary_mask.copy()
         self.crown_mask[start:end, :] = 0

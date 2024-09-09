@@ -35,7 +35,7 @@ class ArbocensusApiInterface:
         if self.available_images == 0:
             print("No images available to process.")
             return
-        # self.post_generate_folder(self.available_images)
+        # self.get_generate_folder(self.available_images)
         chunks = []
         if self.available_images < self.chunk_size:
             chunks.append(self.available_images)
@@ -44,7 +44,7 @@ class ArbocensusApiInterface:
             if self.available_images % self.chunk_size != 0:
                 chunks.append(self.available_images % self.chunk_size)
         for n in chunks:
-            self.post_generate_folder(n)
+            self.get_generate_folder(n)
             self.download_images()
             yield 
 
@@ -69,9 +69,9 @@ class ArbocensusApiInterface:
         else:
             raise Exception(f"Error: {response.status_code}. Failed to fetch data.")
 
-    def post_generate_folder(self, num_images):
+    def get_generate_folder(self, num_images):
         generate_folder_url = self.api_url + self.generate_folder_ep
-        response = requests.post(
+        response = requests.get(
             generate_folder_url, 
             headers={'Authorization': f"Api-Key {self.secret_key}"}, 
             json={'num_of_samples': num_images}
