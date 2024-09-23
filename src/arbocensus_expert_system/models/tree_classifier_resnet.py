@@ -5,7 +5,7 @@ import torch.nn as nn
 from PIL import Image
 import torch.nn.functional as F
 
-from tree_reviewer.config import get_env
+from arbocensus_expert_system.config import get_env
 
 class TreeClassifierResnet:
     def __init__(self, image_size=540):

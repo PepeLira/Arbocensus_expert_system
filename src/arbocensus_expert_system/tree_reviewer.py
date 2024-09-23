@@ -1,10 +1,10 @@
-from tree_reviewer.strategies.tree.tree_segmentation_strategy import TreeSegmentationStrategy
-from tree_reviewer.strategies.card.card_segmentation_strategy import CardSegmentationStrategy
-from tree_reviewer.models.card_image import CardImage
-from tree_reviewer.models.tree_metrics import TreeMetrics
-from tree_reviewer.helpers.validation_helper import ValidationHelper as vh
+from arbocensus_expert_system.strategies.tree.tree_segmentation_strategy import TreeSegmentationStrategy
+from arbocensus_expert_system.strategies.card.card_segmentation_strategy import CardSegmentationStrategy
+from arbocensus_expert_system.models.card_image import CardImage
+from arbocensus_expert_system.models.tree_metrics import TreeMetrics
+from arbocensus_expert_system.helpers.validation_helper import ValidationHelper as vh
 import os
-from tree_reviewer.config import get_env
+from arbocensus_expert_system.config import get_env
 
 class TreeReviewer:
     def __init__(self, tree_segmentation_strategy: TreeSegmentationStrategy, card_segmentation_strategy: CardSegmentationStrategy):

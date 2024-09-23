@@ -1,9 +1,9 @@
 import os
 from PIL import Image
 import numpy as np
-from tree_reviewer.models.tree_image import TreeImage
+from arbocensus_expert_system.models.tree_image import TreeImage
 from datetime import datetime
-from tree_reviewer.config import get_env
+from arbocensus_expert_system.config import get_env
 import json
 
 class ImageLoader:

@@ -1,16 +1,16 @@
 print("Importing Dependencies...")
 import os
 import json
-from tree_reviewer.image_loader import ImageLoader
-from tree_reviewer.tree_reviewer import TreeReviewer
-from tree_reviewer.models.tree_metrics import TreeMetrics
-from tree_reviewer.models.mask_extractor_sam import MaskExtractorSAM
-from tree_reviewer.models.monocular_depth_dam import MonocularDepthDAM
-from tree_reviewer.models.gdino_object_detector import GDinoObjectDetector
-from tree_reviewer.models.tree_classifier_resnet import TreeClassifierResnet
-from tree_reviewer.strategies.tree.first_tree_segmenter import FirstTreeSegmenter
-from tree_reviewer.strategies.card.card_segmentation_strategy import CardSegmentationStrategy
-from tree_reviewer.config import get_env
+from arbocensus_expert_system.image_loader import ImageLoader
+from arbocensus_expert_system.tree_reviewer import TreeReviewer
+from arbocensus_expert_system.models.tree_metrics import TreeMetrics
+from arbocensus_expert_system.models.mask_extractor_sam import MaskExtractorSAM
+from arbocensus_expert_system.models.monocular_depth_dam import MonocularDepthDAM
+from arbocensus_expert_system.models.gdino_object_detector import GDinoObjectDetector
+from arbocensus_expert_system.models.tree_classifier_resnet import TreeClassifierResnet
+from arbocensus_expert_system.strategies.tree.first_tree_segmenter import FirstTreeSegmenter
+from arbocensus_expert_system.strategies.card.card_segmentation_strategy import CardSegmentationStrategy
+from arbocensus_expert_system.config import get_env
 
 # Ignore warnings remove for debugging
 import warnings

@@ -1,8 +1,8 @@
-from tree_reviewer.models.mask_extractor_sam import MaskExtractorSAM
-from tree_reviewer.models.monocular_depth_dam import MonocularDepthDAM
-from tree_reviewer.models.gdino_object_detector import GDinoObjectDetector
-from tree_reviewer.models.tree_classifier_resnet import TreeClassifierResnet
-from tree_reviewer.models.tree_image import TreeImage
+from arbocensus_expert_system.models.mask_extractor_sam import MaskExtractorSAM
+from arbocensus_expert_system.models.monocular_depth_dam import MonocularDepthDAM
+from arbocensus_expert_system.models.gdino_object_detector import GDinoObjectDetector
+from arbocensus_expert_system.models.tree_classifier_resnet import TreeClassifierResnet
+from arbocensus_expert_system.models.tree_image import TreeImage
 from abc import ABC, abstractmethod
 
 class TreeSegmentationStrategy(ABC):

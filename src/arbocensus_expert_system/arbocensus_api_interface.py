@@ -1,8 +1,8 @@
-from tree_reviewer.expert_system import ExpertSystem
+from arbocensus_expert_system.expert_system import ExpertSystem
 import os
 import json
 import requests
-from tree_reviewer.config import get_env
+from arbocensus_expert_system.config import get_env
 
 class ArbocensusApiInterface:
     def __init__(self, images_folder=None, output_path=os.getcwd(), chunk_size=50):

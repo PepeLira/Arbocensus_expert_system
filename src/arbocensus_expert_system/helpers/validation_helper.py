@@ -1,4 +1,4 @@
-from tree_reviewer.config import get_env
+from arbocensus_expert_system.config import get_env
 
 class ValidationHelper:
     @staticmethod
