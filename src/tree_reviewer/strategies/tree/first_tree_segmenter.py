@@ -20,7 +20,7 @@ class FirstTreeSegmenter(TreeSegmentationStrategy):
         tree_image = self.classify_species(tree_image)
         first_tree_mask, score = self.mask_extractor.get_hypothesis_mask(
             tree_image)
-        first_tree_mask = TreeMask(first_tree_mask, score)
+        first_tree_mask = TreeMask(first_tree_mask, score, card_mark=tree_image.card_mark)
         tree_image.define_tree_mask(first_tree_mask)
         tree_image.assign_hypothesis_score(first_tree_mask.score)
         if plot:
@@ -41,7 +41,7 @@ class FirstTreeSegmenter(TreeSegmentationStrategy):
                 filtered_ref_coords, 
                 filtered_ref_labels, 
                 xyxy_bbox=depth_mask.get_mask_xyxy_bbox())
-            filtered_tree_mask = TreeMask(filtered_tree_mask, score)
+            filtered_tree_mask = TreeMask(filtered_tree_mask, score, card_mark=tree_image.card_mark)
             filtered_tree_mask.isolate_largest_segment()
             if plot:
                 filtered_tree_mask.display_mask()

@@ -21,7 +21,7 @@ class MonocularDepthDAM:
     def get_depth_mask(self, tree_image, mask = None):
         depth_image_array = self.measure_depth(tree_image.pil_image, mask = mask)
         mask = np.where(depth_image_array > 0, 1, 0)
-        return TreeMask(mask, 0)
+        return TreeMask(mask, 0, card_mark=tree_image.card_mark)
 
     def isolate_tree_depth(self, tree_image, mask = None, plot=False):
         depth_image_array = self.measure_depth(tree_image.pil_image, mask = mask)
@@ -32,7 +32,8 @@ class MonocularDepthDAM:
             plot_filtered_depth_images(filtered_depth_images, depth_image_array)
 
         depth_masks, reference_depth_mask = self.im_array_2_mask(filtered_depth_images, 
-                                                                depth_image_array)
+                                                                depth_image_array,
+                                                                card_mark=tree_image.card_mark)
 
         scores = self.evaluate_masks_scores(depth_masks, reference_depth_mask, depth_masks[0].shape)
         best_mask_index = np.argmax(scores)
@@ -57,11 +58,11 @@ class MonocularDepthDAM:
 
         return segments
     
-    def im_array_2_mask(self, filtered_images, reference_image):
+    def im_array_2_mask(self, filtered_images, reference_image, card_mark=None):
         depth_masks = []
         for depth_image in filtered_images:
             depth_mask = np.where(depth_image > 0, 1, 0)
-            depth_mask = TreeMask(depth_mask, 0)   
+            depth_mask = TreeMask(depth_mask, 0, card_mark=card_mark)   
             depth_masks.append(depth_mask)
 
         depth_masks = np.array(depth_masks)

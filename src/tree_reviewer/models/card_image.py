@@ -5,7 +5,7 @@ from .helpers.model_helpers import show_mask, distance
 from .helpers.card_helpers import sort_coords
 
 class CardImage:
-    def __init__ (self, image_array):
+    def __init__ (self, image_array, mark=None):
         self.array = image_array
         self.binary_mask = None
         self.classification_score = None
@@ -13,6 +13,7 @@ class CardImage:
         self.card_corners = None
         self.mm_per_pixel = None
         self.l_side = None
+        self.manual_mark = mark
 
     def define_card_mask(self, mask):
         if mask.sum() > 0:

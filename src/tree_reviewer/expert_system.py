@@ -16,8 +16,6 @@ from tree_reviewer.config import get_env
 import warnings
 warnings.filterwarnings("ignore")
 
-import pdb
-
 class ExpertSystem:
     def __init__(self, image_folder, output_path=os.getcwd(), with_masks=False, chunk_size=1, start_chunk=0):
         self.image_loader = ImageLoader(
@@ -100,6 +98,6 @@ class ExpertSystem:
 if __name__ == "__main__":
     image_folder = get_env('TEST_TREE_IMAGES_PATH')
     output_path = get_env('TEST_RESULTS_PATH')
-    expert_system = ExpertSystem(image_folder, with_masks=True, chunk_size=10, start_chunk=261)
+    expert_system = ExpertSystem(image_folder, with_masks=True, chunk_size=109, start_chunk=0, output_path=output_path)
     expert_system.bulk_review()
     print("Done!")

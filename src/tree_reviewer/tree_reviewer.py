@@ -16,7 +16,9 @@ class TreeReviewer:
         self.error_tags = []
         
         tree_image = self.segment_tree_image(tree_image, plot=plot)
-        search_card_image = tree_image.get_search_card_image()
+        search_card_image, card_marks = tree_image.get_search_card_image()
+        if card_marks is not None:
+            tree_image.update_card_mark(card_marks)
         segmented_card = self.review_card(search_card_image, tree_image)
 
         tree_metrics = TreeMetrics(tree_image)
@@ -35,7 +37,7 @@ class TreeReviewer:
         return tree_metrics
 
     def review_card(self, image, tree_image):
-        card_image = CardImage(image) 
+        card_image = CardImage(image, mark=tree_image.card_mark) 
         if len(card_image.array) > 5:
             card_image = self.card_segmentation_strategy.segment(card_image)
         pixel_diameter = tree_image.tree_mask.get_lower_diameter()

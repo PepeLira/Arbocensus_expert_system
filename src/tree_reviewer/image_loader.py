@@ -3,6 +3,8 @@ from PIL import Image
 import numpy as np
 from tree_reviewer.models.tree_image import TreeImage
 from datetime import datetime
+from tree_reviewer.config import get_env
+import json
 
 class ImageLoader:
     def __init__(self, folder_path, chunk_size, start_chunk):
@@ -13,6 +15,17 @@ class ImageLoader:
         self.data_chunks = self.define_data_chunks(self.image_paths, chunk_size)
         self.current_chunk = self.data_chunks[start_chunk]
         self.current_date = datetime.now().date().__str__() 
+        self.marks_json_path = get_env('MARKS_JSON_PATH')
+        self.marks_data = self.define_marks()
+    
+    def define_marks(self):
+        # check if the marks json file exists
+        if os.path.exists(self.marks_json_path):
+            with open(self.marks_json_path, 'r') as f:
+                marks_data = json.load(f)
+        else:
+            marks_data = None
+        return marks_data
 
     def path_to_images(self):
         files = os.listdir(self.folder_path)
@@ -66,8 +79,19 @@ class ImageLoader:
     def define_image(self, image_path, file_name, count):
         self.pil_image = Image.open(image_path).convert("RGB")
         self.image_array = np.array(self.pil_image)
-        
-        return TreeImage(self.image_array, file_name, count, self.pil_image)
+        file_id = file_name.split('.')[0]
+        if file_id in list(self.marks_data.keys()):
+            card_mark = self.marks_data[file_id][0]
+        else:
+            card_mark = None
+
+        return TreeImage(
+            self.image_array, 
+            file_name, 
+            count, 
+            self.pil_image, 
+            card_mark = card_mark
+        )
     
     def current_chunk_name(self):
         return 'batch_' + self.current_date + '_'

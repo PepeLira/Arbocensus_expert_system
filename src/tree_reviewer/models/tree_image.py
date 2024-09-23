@@ -4,7 +4,7 @@ from .tree_mask import TreeMask
 from .helpers.model_helpers import show_mask
 
 class TreeImage:
-    def __init__(self, image_array, file, count, pil_image):
+    def __init__(self, image_array, file, count, pil_image, card_mark = None):
         self.array = image_array
         self.file = file
         self.count = count
@@ -20,6 +20,7 @@ class TreeImage:
         self.mask_xyxy = None
         self.species = None
         self.species_confidence = None
+        self.card_mark = card_mark
 
     def get_image_xyxy_bbox(self, x_padding=30):
         size = self.array.shape
@@ -63,6 +64,9 @@ class TreeImage:
 
     def get_search_card_image(self):
         return self.tree_mask.get_search_card_image(self.array)
+    
+    def update_card_mark(self, card_mark):
+        self.card_mark = card_mark
 
     def define_tree_mask(self, mask: TreeMask):
         self.tree_mask = mask

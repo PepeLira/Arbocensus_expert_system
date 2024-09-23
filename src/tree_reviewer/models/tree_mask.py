@@ -8,7 +8,7 @@ from .helpers.mask_helpers import find_longest_continuous_segment, get_mask_norm
 import pdb
 
 class TreeMask:
-    def __init__(self, binary_mask, score):
+    def __init__(self, binary_mask, score, card_mark=None):
         if type(binary_mask) != type(np.array([])):
             raise ValueError("The mask should be a numpy array.")
         self.binary_mask = binary_mask
@@ -17,6 +17,7 @@ class TreeMask:
         self.vertical_inside_points = None
         self.trunk_mask = None
         self.crown_mask = None
+        self.card_mark = card_mark
     
     def get_thin_mask(self, factor=4):
         if not isinstance(self.binary_mask, np.ndarray):
@@ -177,12 +178,28 @@ class TreeMask:
                     self.search_card_bbox[i] = self.binary_mask.shape[0]
     
     def get_search_card_image(self, image):
+        self.updated_card_mark = None
         self.define_search_card_bbox()
         search_card_image = image[
             self.search_card_bbox[1]:self.search_card_bbox[3], 
             self.search_card_bbox[0]:self.search_card_bbox[2]]
         
-        return search_card_image
+        if self.card_mark is not None:
+            self.update_card_mark()
+        
+        return search_card_image, self.updated_card_mark
+    
+    def update_card_mark(self):
+        h,  w = self.shape
+        norm_bbox = self.search_card_bbox.copy()
+        w_scale = np.max([norm_bbox[0]/w, norm_bbox[2]/w]), np.min([norm_bbox[0]/w, norm_bbox[2]/w])
+        h_scale = np.max([norm_bbox[1]/h, norm_bbox[3]/h]), np.min([norm_bbox[1]/h, norm_bbox[3]/h])
+        x_cord = (self.card_mark[0] - w_scale[1]) / (w_scale[0] - w_scale[1])
+        y_cord = (self.card_mark[1] - h_scale[1]) / (h_scale[0] - h_scale[1])
+        self.updated_card_mark = [x_cord, y_cord]
+
+        return self.updated_card_mark
+        
     
     def get_lower_diameter(self):
         diameters, _ = self.get_mask_pixel_diameters()
