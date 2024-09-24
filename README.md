@@ -1,7 +1,7 @@
 # Arbocensus Expert System
 Arbocensus es un proyecto impulsado por la Facultad de Ingeniería de la Universidad de los Andes para la detección y censado del arbolado urbano. Busca ser una plataforma de uso publico que permite a personas corrientes realizar labores de censado, realizando campañas para obtener datos de manera eficiente e integrando técnicas de visión artificial para obtener los parámetros de cada árbol mediante un grupo de fotografías.
 
-En concreto este repositorio esta destinado a la implementación del **Sistema Experto**. Tomando como base las imágenes recolectadas por la plataforma Arbocensus este sistema es capaz de extraer métricas importantes para el censado de arboles como los son la altura general, el diámetro a la altura del pecho (DAP), inclinación y alto de las ramas principales. Esta fue implementada en un paquete de Python disponible en `src/arbocensus_expert_system/`, diseñando un flujo que integra modelos como:
+En concreto este repositorio esta destinado a la implementación del **Sistema Experto**. Tomando como base las imágenes recolectadas por la plataforma Arbocensus, este sistema es capaz de extraer métricas importantes para el censado de arboles como los son la altura general, el diámetro a la altura del pecho (DAP), inclinación y alto de las ramas principales. Esta fue implementada en un paquete de Python disponible en `src/arbocensus_expert_system/`, diseñando un flujo que integra modelos como:
  - [Segment Anything (SAM)](https://github.com/facebookresearch/segment-anything) para la extracción de mascaras de arboles.
  - [Depth Anything](https://github.com/LiheYoung/Depth-Anything) para filtrar y mejorar el area de búsqueda del árbol y las tarjetas de referencia.
  - [Grounding Dino](https://github.com/IDEA-Research/GroundingDINO) para la búsqueda de las tarjetas de referencia. 
@@ -14,9 +14,9 @@ En concreto este repositorio esta destinado a la implementación del **Sistema E
 
 ## Guía de Inicio
 ### 1. Instalación de PyTorch
-Antes de comenzar debemos preparar un par de cosas antes de instalar nuestra primera dependencia, `PyTorch`. En concreto este proyecto se beneficia considerablemente de poder trabajar con una tarjeta gráfica dedicada con sus drivers CUDA compatibles. Para esto debemos asegurarnos de contar con los drivers compatibles como se especifica en su [documentación] (https://pytorch.org/) (CUDA 12.4, 12.1 o 11.8 al momento de escribir este documento). Considerando que estos no suelen ser la ultima versión disponible de Nvidia, debemos elegir una [versión compatible](https://developer.nvidia.com/cuda-toolkit-archive).
+Antes de comenzar debemos preparar un par de cosas antes de instalar nuestra primera dependencia, `PyTorch`. En concreto este proyecto se beneficia considerablemente de poder trabajar con una tarjeta gráfica dedicada con sus drivers CUDA. Para esto debemos asegurarnos de contar con los drivers compatibles como se especifica en su [documentación](https://pytorch.org/) (CUDA 12.4, 12.1 o 11.8 al momento de escribir este documento). Considerando que estos no suelen ser la ultima versión disponible de Nvidia, debemos elegir una [versión compatible](https://developer.nvidia.com/cuda-toolkit-archive).
 
-Una vez instalados los drivers de nuestra tarjeta gráfica, comenzamos la instalación de `PyTorch` como indica su [documentación] (https://pytorch.org/). 
+Una vez instalados los drivers de nuestra tarjeta gráfica, comenzamos la instalación de `PyTorch` como indica su [documentación](https://pytorch.org/). 
 
 Verificamos que se realizo de manera correcta abriendo una consola de python (o ejecutando un archivo) con las siguientes lineas:
 ```
@@ -41,7 +41,7 @@ $ cd .\src\
 
 Instalamos las dependencias listadas en `requirements.txt`
 ```
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 ### 3. Descargar pesos pre-entrenados 
@@ -51,7 +51,7 @@ Como se menciono anteriormente este proyecto integra multiples modelos. Lamentab
 - `sam_vit_h_4b8939.pth` disponible en el [repositorio oficial de SAM](https://github.com/facebookresearch/segment-anything?tab=readme-ov-file) o en [este link](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth).
 - `species_resnet18.pth` es un respaldo de nuestro modelo de clasificación preliminar, disponible en este link.
 
-Una vez descargados debemos crear una carpeta en el proyecto con el nombre `./weights_and_checkpoints/` (y asegurarnos de no subirla por accidente en un commit.)
+Una vez descargados debemos crear una carpeta en el proyecto con el nombre `./weights_and_checkpoints/` (*y asegurarnos de no subirla por accidente en un commit*).
 
 ### 4. Preparar nuestras variables de entorno.
 Si observamos dentro del directorio `src/arbocensus_expert_system/` encontraremos un archivo `parameters.env`. Debemos crear una copia de este y renombrarla a `my_parameters.env` y de esta manera no correr el riesgo de publicar información sensible por error. 
@@ -65,14 +65,14 @@ Algunos de los campos más importantes a especificar son:
 - MARKS_JSON_PATH: la ruta a un archivo de marcas (coordenadas donde se encuentra cada tarjeta en cada imagen de árbol).
 
 ### 5. Probar la aplicación localmente
-Listo si queremos comenzar a realizar detecciones de arboles podremos llamar a algunos paquetes de la aplicación, por ejemplo `tree_reviewer` se encarga de evaluar una imagen e imprimir los resultados, `expert_system` nos permite analizar todas las imágenes de TEST_TREE_IMAGES_PATH. 
+Listo, si queremos comenzar a realizar detecciones de arboles podremos llamar a algunos paquetes de la aplicación, por ejemplo `tree_reviewer` se encarga de evaluar una imagen e imprimir los resultados, `expert_system` nos permite analizar todas las imágenes de TEST_TREE_IMAGES_PATH. 
 
 Podemos ejecutarlos llamando al paquete:
 ```
-$cd ./src/
+$ cd ./src/
 ```
 ```
-python -m arbocensus_expert_system.expert_system
+$ python -m arbocensus_expert_system.expert_system
 ```
 
 obtendremos los resultados en TEST_RESULTS_PATH.
@@ -86,10 +86,10 @@ Ejecutando el paquete `arbocensus_api_interface` podremos realizar llamadas a la
 
 Luego para comenzar a procesar las imágenes pendientes en la cola de una campaña podremos ejecutar:
 ```
-$cd ./src/
+$ cd ./src/
 ```
 ```
-python -m arbocensus_expert_system.arbocensus_api_interface
+$ python -m arbocensus_expert_system.arbocensus_api_interface
 ```
 
 **Comentario:** En caso de necesitar programar la ejecución cíclica de esta tarea, podremos llamar a este script mediante un cron dependiendo del sistema operativo con el que se este trabajando.
