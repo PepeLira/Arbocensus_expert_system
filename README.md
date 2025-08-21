@@ -49,7 +49,7 @@ $ pip install -r requirements.txt
 Como se menciono anteriormente este proyecto integra multiples modelos. Lamentablemente los pesos pre-entrenados suelen ser de un tamaño mayor al permitido en Github, por lo que el estándar sugiere descargarlos de diferentes fuentes. En concreto este proyecto depende dos pesos:
 
 - `sam_vit_h_4b8939.pth` disponible en el [repositorio oficial de SAM](https://github.com/facebookresearch/segment-anything?tab=readme-ov-file) o en [este link](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth).
-- `species_resnet18.pth` es un respaldo de nuestro modelo de clasificación preliminar, disponible en este link.
+- `species_resnet18.pth` es un respaldo de nuestro modelo de clasificación preliminar, disponible en [este link](weights_and_checkpoints/species_resnet18.pth).
 
 Una vez descargados debemos crear una carpeta en el proyecto con el nombre `./weights_and_checkpoints/` (*y asegurarnos de no subirla por accidente en un commit*).
 
@@ -98,4 +98,7 @@ $ python -m arbocensus_expert_system.arbocensus_api_interface
 
 1. Agregar una estrategia para obtener la inclinación de los troncos de los arboles con respecto al suelo.  
 2. Continuar el desarrollo del modelo de clasificación de especies.  
+3. Cambiar el modelo de clasificación de árboles, actualmente se trabaja con grounding Dino y es posible mejorar los resultados entrenando un nuevo clasificador.
+    Es interesante considerar la evolución de modelos como [Dinov3](https://github.com/facebookresearch/dinov3) que usan técnicas similares a las planteadas. 
 
+![Facultad de Ingeniería - Universidad de los Andes](f.ing_cienc.jpg)
