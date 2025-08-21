@@ -1,4 +1,3 @@
-/weights_and_checkpoints
 __pycache__
 weights
 mask_results
@@ -7,3 +6,4 @@ images
 *.pth
 *.env
 !parameters.env
+!species_resnet18.pth
