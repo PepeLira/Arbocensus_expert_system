@@ -1,5 +1,5 @@
 # Arbocensus Expert System
-Arbocensus es un proyecto impulsado por la Facultad de Ingeniería de la Universidad de los Andes para la detección y censado del arbolado urbano. Busca ser una plataforma de uso publico que permite a personas corrientes realizar labores de censado, realizando campañas para obtener datos de manera eficiente e integrando técnicas de visión artificial para obtener los parámetros de cada árbol mediante un grupo de fotografías.
+Arbocensus es un proyecto impulsado por la Facultad de Ingeniería de la Universidad de los Andes para la detección y censado del arbolado urbano. Busca ser una plataforma de uso público que permite a personas corrientes realizar labores de censado, realizando campañas para obtener datos de manera eficiente e integrando técnicas de visión artificial para obtener los parámetros de cada árbol mediante un grupo de fotografías.
 
 En concreto este repositorio esta destinado a la implementación del **Sistema Experto**. Tomando como base las imágenes recolectadas por la plataforma Arbocensus, este sistema es capaz de extraer métricas importantes para el censado de arboles como los son la altura general, el diámetro a la altura del pecho (DAP), inclinación y alto de las ramas principales. Esta fue implementada en un paquete de Python disponible en `src/arbocensus_expert_system/`, diseñando un flujo que integra modelos como:
  - [Segment Anything (SAM)](https://github.com/facebookresearch/segment-anything) para la extracción de mascaras de arboles.
@@ -8,8 +8,8 @@ En concreto este repositorio esta destinado a la implementación del **Sistema E
  - [Clasificador Resnet18](https://github.com/PepeLira/Arbocensus_expert_system/blob/main/notebooks/species_clasification.ipynb) para la detección de las especies de los arboles. Fue entrenado con las imágenes disponibles en Arbocensus y la es especies catalogadas por [Arbotag](https://web.arbotag.cl/) 
 
 **COMENTARIOS...** 
-- Las tarjetas de referencia se encuentran a los pies de cada árbol, corresponden a una tarjeta tamaño estándar, como una tarjeta del banco o pase para el transporte publico. Es mediante a esta que es posible realizar una taza de pixeles a un sistema métrico, tomando como referencia sus dimensiones.
-- Para entender mejor el flujo de trabajo antes de desarrollar el paquete, se realizo un Jupyter notebook probando los diferentes modelos. [Este se encuentra disponible en `./notebooks/exploration.ipynb`.](https://github.com/PepeLira/Arbocensus_expert_system/blob/main/notebooks/exploration.ipynb)
+- Las tarjetas de referencia se encuentran a los pies de cada árbol, corresponden a una tarjeta tamaño estándar, como una tarjeta del banco o pase para el transporte público. Es mediante ésta que es posible realizar una taza de pixeles a un sistema métrico, tomando como referencia sus dimensiones.
+- Para entender mejor el flujo de trabajo antes de desarrollar el paquete, se realizó un Jupyter notebook probando los diferentes modelos. [Este se encuentra disponible en `./notebooks/exploration.ipynb`.](https://github.com/PepeLira/Arbocensus_expert_system/blob/main/notebooks/exploration.ipynb)
 - El proceso de entrenamiento del clasificador esta disponible en [el siguiente jupyter notebook](https://github.com/PepeLira/Arbocensus_expert_system/blob/main/notebooks/species_clasification.ipynb).
 
 ## Guía de Inicio
