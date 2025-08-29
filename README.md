@@ -5,7 +5,7 @@ En concreto este repositorio esta destinado a la implementación del **Sistema E
  - [Segment Anything (SAM)](https://github.com/facebookresearch/segment-anything) para la extracción de mascaras de arboles.
  - [Depth Anything](https://github.com/LiheYoung/Depth-Anything) para filtrar y mejorar el area de búsqueda del árbol y las tarjetas de referencia.
  - [Grounding Dino](https://github.com/IDEA-Research/GroundingDINO) para la búsqueda de las tarjetas de referencia. 
- - [Clasificador Resnet18](https://github.com/PepeLira/Arbocensus_expert_system/blob/main/notebooks/species_clasification.ipynb) para la detección de las especies de los arboles. Fue entrenado con las imágenes disponibles en Arbocensus y la es especies catalogadas por [Arbotag](https://web.arbotag.cl/) 
+ - [Clasificador Resnet18](https://github.com/PepeLira/Arbocensus_expert_system/blob/main/notebooks/species_clasification.ipynb) para la detección de las especies de los arboles. Fue entrenado con las imágenes disponibles en Arbocensus y las especies catalogadas por [Arbotag](https://web.arbotag.cl/) 
 
 **COMENTARIOS...** 
 - Las tarjetas de referencia se encuentran a los pies de cada árbol, corresponden a una tarjeta tamaño estándar, como una tarjeta del banco o pase para el transporte publico. Es mediante a esta que es posible realizar una taza de pixeles a un sistema métrico, tomando como referencia sus dimensiones.
